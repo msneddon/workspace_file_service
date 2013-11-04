@@ -1,0 +1,29 @@
+[
+	{
+		'id':'TXT',
+		'name':'Text File'
+		'description':'just a simple text file',
+		'url':'http://en.wikipedia.org/wiki/Text_file',
+		'extensions':['txt','text'],
+		'parent':[],
+		'default_uploader':'TextFileUploader',
+		'uploaders':['TextFileUploader'],
+		'default_downloader':'TextFileDownloader',
+		'downloaders':['TextFileDownloader'],
+		'ws_typedefname':['BasicFile.TextFile']
+	},
+	{
+		'id':'FASTA',
+		'name':'FASTA File'
+		'description':'"text-based format for sequence data',
+		'url':'http://en.wikipedia.org/wiki/FASTA_format',
+		'extensions':['fasta','fas','fna','ffn','faa','frn'],
+		'parent':['TXT'],
+		'default_uploader':'SimpleFastaFileUploader',
+		'uploaders':['SimpleFastaFileUploader'],
+		'default_downloader':'SimpleFastaFileDownloader',
+		'downloaders':['SimpleFastaFileDownloader'],
+		'ws_typedefname':['BasicFile.FastaFile']
+	}
+
+]
