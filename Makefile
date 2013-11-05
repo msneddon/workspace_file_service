@@ -76,7 +76,7 @@ test: test-client test-service test-scripts
 test-client: test-service
 
 test-service:
-	@echo "no tests to test"
+	$(ANT) test
 
 test-scripts:
 	@echo "no scripts to test"
