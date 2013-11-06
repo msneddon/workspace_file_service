@@ -1,0 +1,22 @@
+{
+	"title":"FileTypes.json specification",
+	"type":"array",
+	"items": {
+		"type":"object",
+		"properties": {
+			"id": { "type":"string", "minLength":3 },
+			"name": { "type":"string", "minLength":3 }
+		},
+		"required":[
+			"id",
+			"name",
+			"description",
+			"url",
+			"extensions",
+			"parent"
+			]
+	}
+
+
+
+}

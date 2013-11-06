@@ -11,6 +11,7 @@
   <property name="dist" location="dist"/>
   <property name="test" location="test"/>
   <property name="jardir" location="../jars/lib/jars/"/>
+  <property name="wsdir" location="../workspace_deluxe/dist/"/>
   <property name="classes" location="classes"/>
   <property name="jar.file" value="WorkspaceFileHandlerService.jar"/>
   <property name="war.file" value="WorkspaceFileHandlerService.war"/>
@@ -33,18 +34,24 @@
     <include name="jackson/jackson-databind-2.2.3.jar"/>
   </fileset>
 
+  <fileset dir="${wsdir}" id="wslib">
+    <include name="client/WorkspaceClient.jar"/>
+  </fileset>
+	
   <fileset dir="${jardir}" id="applicationlib">
+    <include name="client/WorkspaceClient.jar"/>
   </fileset>
 
   <union id="serverside">
     <fileset refid="serverlib"/>
     <fileset refid="clientserverlib"/>
+    <fileset refid="wslib"/>
     <fileset refid="applicationlib"/>
   </union>
 
   <fileset id="client-jdoc-files" dir="${src}/us/kbase" defaultexcludes="yes">
-      <include name="file/workspace/workspacefilehandler/*.java"/>
-      <exclude name="file/workspace/workspacefilehandler/WorkspaceFileHandlerServer.java"/>
+      <include name="workspacefilehandler/*.java"/>
+      <exclude name="workspacefilehandler/WorkspaceFileHandlerServer.java"/>
       <include name="common/service/*.java"/>
       <exclude name="common/service/JsonServer*"/>
       <exclude name="common/service/JacksonTupleModule.java"/>
@@ -52,8 +59,8 @@
   </fileset>
 
   <fileset id="client-class-files" dir="${classes}" defaultexcludes="yes">
-    <include name="us/kbase/file/workspace/*.class"/>
-    <exclude name="us/kbase/file/workspace/WorkspaceFileHandlerServer.class"/>
+    <include name="us/kbase/workspacefilehandler/*.class"/>
+    <exclude name="us/kbase/workspacefilehandler/WorkspaceFileHandlerServer.class"/>
     <include name="us/kbase/common/service/*.class"/>
     <exclude name="us/kbase/common/service/JsonServer*"/>
   </fileset>

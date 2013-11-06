@@ -55,6 +55,9 @@ compile: compile-typespec compile-java
 
 compile-java:
 	gen_java_types -S -o . -u http://kbase.us/services/$(SERVICE)/ $(SERVICE_CAPS).spec
+	gen_java_types -S -o . -u http://kbase.us/services/File/ File.spec
+	rm src/us/kbase/file/FileClient.java
+	rm src/us/kbase/file/FileServer.*
 	-rm lib/*.jar
 
 compile-typespec:

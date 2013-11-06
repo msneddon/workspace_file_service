@@ -94,6 +94,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public List<String> uploadBatch(List<UploadParams> paramametersList, AuthToken authPart) throws Exception {
         List<String> returnVal = null;
         //BEGIN upload_batch
+        
         //END upload_batch
         return returnVal;
     }
