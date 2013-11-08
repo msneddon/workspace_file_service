@@ -39,7 +39,7 @@ module WorkspaceFileHandler {
 		  default_uploader    - id of the default uploader for this file type, empty if none defined
 		  uploaders           - list of all uploaders registered for this filetype
 		  default_downloader  - id of the default downloader for this filetype, empty if none defined
-		  
+		  downloaders         - list of all downloaders registered for this filetype
 	*/
 	typedef structure {
 		filetype_id id;
@@ -51,7 +51,6 @@ module WorkspaceFileHandler {
 		list <loader_id> uploaders;
 		string loader_id;
 		list <loader_id> downloaders;
-		list <ws_typedefname> typedefnames;
 	} FileType;
 	
 	
@@ -80,6 +79,12 @@ module WorkspaceFileHandler {
 	
 	
 	/*
+		Fetch a list of all file types that are known, note that not all will support both upload and
+		download.
+	*/
+	funcdef getAllFileTypes() returns(list<FileType>);
+	
+	/*
 		Fetch a list of supported file types that can be uploaded as a Workspace object.
 	*/
 	funcdef getUploadableFileTypes() returns(list<FileType>);
@@ -93,6 +98,7 @@ module WorkspaceFileHandler {
 		Given a list of filetype_ids, return a list of the FileType information if the type exists.
 	*/
 	funcdef getFileType(list<filetype_id> ids) returns(list<FileType>);
+	
 	
 	
 	/*

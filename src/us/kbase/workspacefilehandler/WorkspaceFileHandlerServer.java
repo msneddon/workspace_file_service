@@ -7,6 +7,10 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 
 //BEGIN_HEADER
+import java.net.URL;
+import us.kbase.workspacefilehandler.core.WsFileManager;
+import us.kbase.workspacefilehandler.core.WsLoaderDispatcher;
+import us.kbase.workspacefilehandler.core.WsUploadResult;
 //END_HEADER
 
 /**
@@ -20,12 +24,32 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
 
     //BEGIN_CLASS_HEADER
+    private static String wsURL = "http://140.221.84.170:7058";
+    private WsFileManager manager;;
+    private WsLoaderDispatcher dispatcher;
     //END_CLASS_HEADER
 
     public WorkspaceFileHandlerServer() throws Exception {
         super("WorkspaceFileHandler");
         //BEGIN_CONSTRUCTOR
+        this.manager = new WsFileManager();
+        this.dispatcher = new WsLoaderDispatcher(manager,new URL(wsURL));
         //END_CONSTRUCTOR
+    }
+
+    /**
+     * <p>Original spec-file function name: getAllFileTypes</p>
+     * <pre>
+     * Fetch a list of all file types that are known, note that not all will support both upload and
+     * download.
+     * </pre>
+     */
+    @JsonServerMethod(rpc = "WorkspaceFileHandler.getAllFileTypes")
+    public List<FileType> getAllFileTypes() throws Exception {
+        List<FileType> returnVal = null;
+        //BEGIN getAllFileTypes
+        //END getAllFileTypes
+        return returnVal;
     }
 
     /**
@@ -66,6 +90,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public List<FileType> getFileType(List<String> ids) throws Exception {
         List<FileType> returnVal = null;
         //BEGIN getFileType
+        returnVal = manager.getFileType(ids);
         //END getFileType
         return returnVal;
     }
@@ -81,6 +106,8 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public String upload(UploadParams parameters, AuthToken authPart) throws Exception {
         String returnVal = null;
         //BEGIN upload
+        WsUploadResult uploadResult = dispatcher.upload(parameters, authPart);
+        returnVal = uploadResult.getAbsWsObjReference();
         //END upload
         return returnVal;
     }

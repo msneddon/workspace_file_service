@@ -62,6 +62,22 @@ public class WorkspaceFileHandlerClient {
     }
 
     /**
+     * <p>Original spec-file function name: getAllFileTypes</p>
+     * <pre>
+     * Fetch a list of all file types that are known, note that not all will support both upload and
+     * download.
+     * </pre>
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public List<FileType> getAllFileTypes() throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        TypeReference<List<List<FileType>>> retType = new TypeReference<List<List<FileType>>>() {};
+        List<List<FileType>> res = caller.jsonrpcCall("WorkspaceFileHandler.getAllFileTypes", args, retType, true, false);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: getUploadableFileTypes</p>
      * <pre>
      * Fetch a list of supported file types that can be uploaded as a Workspace object.

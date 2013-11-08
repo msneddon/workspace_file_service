@@ -7,13 +7,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import us.kbase.workspacefilehandler.FileType;
 import us.kbase.workspacefilehandler.FileTypeUtil;
+import us.kbase.workspacefilehandler.exceptions.FileDownloadException;
 import us.kbase.workspacefilehandler.exceptions.FileHandlerInitializationException;
+import us.kbase.workspacefilehandler.exceptions.FileUploadException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,10 +35,6 @@ public class WsFileManager {
 	public WsFileManager() throws IOException, FileHandlerInitializationException {
 		initialize();
 	}
-	
-	
-
-	
 	
 	
 	private Map<String,FileType> fileTypeIndex;
@@ -128,7 +127,7 @@ public class WsFileManager {
 		try {
 			downloaders.put(
 					downloaderName,
-					(WsFileDownloader)ClassLoader.getSystemClassLoader().loadClass(DOWNLOADER_PACKAGE+downloaderName).newInstance());
+					(WsFileDownloader)getClass().getClassLoader().loadClass(DOWNLOADER_PACKAGE+downloaderName).newInstance());
 			if(VERBOSE) { System.out.println("downloader: "+downloaderName); }
 		} catch(final Exception e){
 			throw new FileHandlerInitializationException("unable to instantiate Downloader '"+downloaderName+"'",e);
@@ -139,7 +138,7 @@ public class WsFileManager {
 		try {
 			uploaders.put(
 					uploaderName,
-					(WsFileUploader)ClassLoader.getSystemClassLoader().loadClass(UPLOADER_PACKAGE+uploaderName).newInstance());
+					(WsFileUploader)getClass().getClassLoader().loadClass(UPLOADER_PACKAGE+uploaderName).newInstance());
 			if(VERBOSE) { System.out.println("uploader: "+uploaderName); }
 		} catch(final Exception e){
 			throw new FileHandlerInitializationException("unable to instantiate Uploader '"+uploaderName+"'",e);
@@ -150,17 +149,39 @@ public class WsFileManager {
 		
 	}
 	
-	/*protected WorkspaceFileUploader instantiateUploader(final String className){
-		try{
-			return type.cast(Class.forName(className).newInstance());
-	    } catch(final InstantiationException e){
-	        throw new IllegalStateException(e);
-	    } catch(final IllegalAccessException e){
-	        throw new IllegalStateException(e);
-	    } catch(final ClassNotFoundException e){
-	        throw new IllegalStateException(e);
-	    }
-	}*/
+	public FileType getFileType(String fileTypeId) {
+		return fileTypeIndex.get(fileTypeId);
+	}
+	
+	public List<FileType> getFileType(List<String> fileTypeId) {
+		List<FileType> typeList = new ArrayList<FileType>(fileTypeId.size());
+		for(String id : fileTypeId) {
+			FileType f = fileTypeIndex.get(id);
+			if(f!=null) { typeList.add(f); }
+		}
+		return typeList;
+	}
+	
+	
+	public List<FileType> getAllFileTypes() {
+		return Collections.unmodifiableList(new ArrayList<FileType>(fileTypeIndex.values()));
+	}
+	
+	public WsFileUploader getUploader (String loaderId) throws FileUploadException {
+		WsFileUploader uploader = uploaders.get(loaderId);
+		if(uploader==null) {
+			throw new FileUploadException("Uploader "+loaderId+" not found.");
+		}
+		return uploader;
+	}
+	
+	public WsFileDownloader getDownloader (String loaderId) throws FileDownloadException {
+		WsFileDownloader downloader = downloaders.get(loaderId);
+		if(downloader==null) {
+			throw new FileDownloadException("Downloader "+loaderId+" not found.");
+		}
+		return downloader;
+	}
 	
 	
 	
@@ -184,6 +205,23 @@ public class WsFileManager {
 		br.close();
 		pw.close();
 		return sw.toString();
+	}
+
+
+	public boolean isValidFiletype(String fileTypeId) {
+		return fileTypeIndex.containsKey(fileTypeId);
+	}
+
+
+	public String getDefaultUploader(String fileTypeId) {
+		FileType f = fileTypeIndex.get(fileTypeId);
+		if(f!=null) { return f.getDefaultUploader(); }
+		return "";
+	}
+
+
+	public boolean isValidUploader(String uploader) {
+		return uploaders.containsKey(uploader);
 	}
 	
 }

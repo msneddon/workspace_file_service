@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  *   default_uploader    - id of the default uploader for this file type, empty if none defined
  *   uploaders           - list of all uploaders registered for this filetype
  *   default_downloader  - id of the default downloader for this filetype, empty if none defined
+ *   downloaders         - list of all downloaders registered for this filetype
  * </pre>
  * 
  */
@@ -39,8 +40,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "default_uploader",
     "uploaders",
     "loader_id",
-    "downloaders",
-    "typedefnames"
+    "downloaders"
 })
 public class FileType {
 
@@ -62,8 +62,6 @@ public class FileType {
     private String loaderId;
     @JsonProperty("downloaders")
     private List<String> downloaders = new ArrayList<String>();
-    @JsonProperty("typedefnames")
-    private List<String> typedefnames = new ArrayList<String>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("id")
@@ -198,21 +196,6 @@ public class FileType {
 
     public FileType withDownloaders(List<String> downloaders) {
         this.downloaders = downloaders;
-        return this;
-    }
-
-    @JsonProperty("typedefnames")
-    public List<String> getTypedefnames() {
-        return typedefnames;
-    }
-
-    @JsonProperty("typedefnames")
-    public void setTypedefnames(List<String> typedefnames) {
-        this.typedefnames = typedefnames;
-    }
-
-    public FileType withTypedefnames(List<String> typedefnames) {
-        this.typedefnames = typedefnames;
         return this;
     }
 

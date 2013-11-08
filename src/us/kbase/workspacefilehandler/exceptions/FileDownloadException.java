@@ -1,17 +1,17 @@
 package us.kbase.workspacefilehandler.exceptions;
 
-public class FileUploadException extends Exception {
+public class FileDownloadException extends Exception {
 	private static final long serialVersionUID = 3169019078907064824L;
 
-	public FileUploadException(String message) {
+	public FileDownloadException(String message) {
 		super(message);
 	}
 
-	public FileUploadException(String message, Throwable e) {
+	public FileDownloadException(String message, Throwable e) {
 		super(message,e);
 	}
 
-	public FileUploadException(Throwable e) {
+	public FileDownloadException(Throwable e) {
 		super(e.getMessage() == null ? "Unknown error" : e.getMessage(), e);
 	}
 }

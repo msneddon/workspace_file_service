@@ -12,6 +12,8 @@ module File {
 	} TextFile;
 
 
+
+
 	/*
 		A single entry in a FASTA file, which includes the header line and a sequence.
 	*/
@@ -26,5 +28,8 @@ module File {
 		string filename;
 		list <FastaRow> content;
 	} FastaFile;
+
+
+
 
 };
