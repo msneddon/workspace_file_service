@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import us.kbase.workspacefilehandler.FileType;
-import us.kbase.workspacefilehandler.FileTypeUtil;
 import us.kbase.workspacefilehandler.exceptions.FileDownloadException;
 import us.kbase.workspacefilehandler.exceptions.FileHandlerInitializationException;
 import us.kbase.workspacefilehandler.exceptions.FileUploadException;
@@ -87,7 +86,7 @@ public class WsFileManager {
 			fileTypeIndex.put(f.getId(), f);
 			
 			if(VERBOSE) {
-				System.out.println(FileTypeUtil.toString(f));
+				System.out.println(FileHandlerUtil.toString(f));
 			}
 		}
 		

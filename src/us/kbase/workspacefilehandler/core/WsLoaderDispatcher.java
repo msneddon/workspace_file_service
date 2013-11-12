@@ -55,11 +55,17 @@ public class WsLoaderDispatcher {
 			ws.setAuthAllowedForHttp(true);
 			uploadResult = uploader.upload(file, parameters,ws);
 		} catch (RuntimeException e) {
-			throw new FileUploadException("unexpected internal error encountered during upload of '"+rawParameters.getName()+"'",e);
+			e.printStackTrace();
+			throw new FileUploadException("Unexpected internal error encountered during upload of '"+rawParameters.getName()+"': "+e.getMessage(),e);
 		} catch (UnauthorizedException e) {
-			throw new FileUploadException("user is not authorized to access the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
+			e.printStackTrace();
+			throw new FileUploadException("User is not authorized to access the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
 		} catch (IOException e) {
-			throw new FileUploadException("unable to connect to the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
+			e.printStackTrace();
+			throw new FileUploadException("Unable to connect to the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
+		} catch(FileUploadException e) {
+			e.printStackTrace();
+			throw e;
 		}
 		return uploadResult;
 	}
@@ -67,6 +73,8 @@ public class WsLoaderDispatcher {
 	
 	
 	protected void validateRawUploadParameters(UploadParams rawParameters) throws FileUploadException {
+
+		System.err.println(FileHandlerUtil.toString(rawParameters));
 		// validate filename exists and is not empty
 		if(rawParameters.getName()==null) { throw new FileUploadException("cannot upload file, filename was not set."); }
 		if(rawParameters.getName().equals("")) { throw new FileUploadException("cannot upload file, filename was empty string."); }
@@ -86,13 +94,13 @@ public class WsLoaderDispatcher {
 		} else if(rawParameters.getUploader().equals("")) {
 			throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', uploader name was empty string.");
 		}
-		if(!wfm.isValidUploader(rawParameters.getUploader())) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', file type '"+rawParameters.getUploader()+"' is not a supported uploader."); }
+		if(!wfm.isValidUploader(rawParameters.getUploader())) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', uploader '"+rawParameters.getUploader()+"' is not a supported uploader."); }
 
 		// validate that the workspace name is set
 		if(rawParameters.getWsName()==null) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', target workspace name was not set."); }
 		if(rawParameters.getWsName().equals("")) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', target workspace name was empty string."); }
 		
-		
+
 	}
 	
 	

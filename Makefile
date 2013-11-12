@@ -30,7 +30,7 @@ ANT = ant
 # make sure our make test works
 .PHONY : test
 
-default: build-libs build-docs
+default: build-libs build-docs wrap-dev-scripts
 
 # fake deploy-cfg target for when this is run outside the dev_container
 deploy-cfg:
@@ -50,6 +50,10 @@ build-docs: build-libs
 	pod2html --infile=lib/Bio/KBase/$(SERVICE_CAPS)/Client.pm --outfile=docs/$(SERVICE_CAPS).html
 	rm -f pod2htm?.tmp
 	cp $(SERVICE_CAPS).spec docs/.
+
+wrap-dev-scripts:
+	$(WRAP_PERL_SCRIPT) $(DIR)/scripts/ws-upload-file.pl $(TOP_DIR)/bin/ws-upload-file
+	$(WRAP_PERL_SCRIPT) $(DIR)/scripts/ws-download-file.pl $(TOP_DIR)/bin/ws-download-file
 
 compile: compile-typespec compile-java
 
@@ -100,8 +104,7 @@ deploy-docs:
 	cp  -r docs/* $(SERVICE_DIR)/webroot/.
 
 deploy-scripts:
-	@echo no scripts to deploy
-
+	
 deploy-service: deploy-service-libs deploy-service-scripts
 
 deploy-service-libs:

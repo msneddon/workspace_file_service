@@ -70,7 +70,7 @@ public class TextFileUploader  implements WsFileUploader{
 			uploadResult = new WsUploadResult(result_list.get(0));
 		} catch (Exception e) {
 			// If we encountered an error during saving, we should catch it and throw it back up as a FileUploadException
-			throw new FileUploadException("error encountered when attempting to save data to the Workspace",e);
+			throw new FileUploadException("Error encountered when attempting to save a text file to the Workspace: "+ e.getMessage(),e);
 		}
 		
 		return uploadResult;

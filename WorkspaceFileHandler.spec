@@ -9,7 +9,8 @@ module WorkspaceFileHandler {
 		@id ws
 	*/
 	typedef string ws_id;
-	/* the name of a WS (TOD: import this typedef from module Workspace) */
+	
+	/* the name of a WS (TODO: import this typedef from module Workspace) */
 	typedef string ws_name;
 
 
@@ -138,5 +139,6 @@ module WorkspaceFileHandler {
 	
 	
 	funcdef getDownloader(list<loader_id> ids) returns (list<Downloader>);
+	
 	funcdef getUploader(list<loader_id> ids) returns (list<Uploader>);
 };
