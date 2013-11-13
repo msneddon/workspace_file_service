@@ -3,10 +3,7 @@ package us.kbase.workspacefilehandler.tests;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,13 +14,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import us.kbase.auth.*;
-import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple6;
-import us.kbase.common.service.UObject;
-import us.kbase.common.service.UnauthorizedException;
-import us.kbase.file.TextFile;
 import us.kbase.workspace.*;
+import us.kbase.workspacefilehandler.DownloadParams;
+import us.kbase.workspacefilehandler.DownloadedFile;
+import us.kbase.workspacefilehandler.UploadParams;
+import us.kbase.workspacefilehandler.core.FileData;
 import us.kbase.workspacefilehandler.core.WsFileManager;
+import us.kbase.workspacefilehandler.core.WsLoaderDispatcher;
+import us.kbase.workspacefilehandler.core.WsUploadResult;
 
 
 public class TestFileManager {
@@ -36,8 +35,8 @@ public class TestFileManager {
 	@BeforeClass
 	public static void initWsClient() throws Exception {
 		System.out.println("instantiating ws client.");
-		String user     = "----";
-		String password = "----";
+		String user     = "wstester1";
+		String password = "open1111";
 		ws = new WorkspaceClient(new URL(wsURL), user, password);
 		ws.setAuthAllowedForHttp(true);
 		System.out.println("ws client ready.");
@@ -127,6 +126,71 @@ public class TestFileManager {
 	@Test
 	public void test() throws Exception {
 		
+		/*  DOWNLOAD TEST 
+		WsFileManager manager = new WsFileManager();
+		WsLoaderDispatcher dispatcher = new WsLoaderDispatcher(manager, new URL(wsURL));
+		
+		
+		String user     = "wstester1";
+		String password = "open1111";
+		AuthToken authToken = AuthService.login(user,password).getToken();
+		
+		DownloadParams rawParameters = new DownloadParams();
+		rawParameters.setDownloader("TextFileDownloader");
+		rawParameters.setType("TXT");
+		rawParameters.setRef("kb|ws.3.obj.2.ver.14");
+		
+		FileData d = dispatcher.download(rawParameters, authToken);
+		
+		System.out.println("downloaded:" + d.getFilename());
+		System.out.println(d.getContent());
+		*/
+		
+		/*  UPLOAD TEST */
+		/*
+		WsFileManager manager = new WsFileManager();
+		WsLoaderDispatcher dispatcher = new WsLoaderDispatcher(manager, new URL(wsURL));
+		
+		String user     = "wstester1";
+		String password = "open1111";
+		AuthToken authToken = AuthService.login(user,password).getToken();
+		
+		UploadParams rawParameters = new UploadParams();
+		rawParameters.setType("TXT");
+		rawParameters.setUploader("TextFileUploader");
+
+		rawParameters.setName("MySecondTextFile.txt");
+		rawParameters.setContent("# a text file\nhello text file world.\n");
+		rawParameters.setWsName("TestWS1");
+		
+		WsUploadResult uploadResult = dispatcher.upload(rawParameters, authToken);
+		
+		System.out.println("SAVED! -> "+uploadResult.getAbsWsObjReference());
+		*/
+		
+		/*  fasta UPLOAD TEST */
+		
+		WsFileManager manager = new WsFileManager();
+		WsLoaderDispatcher dispatcher = new WsLoaderDispatcher(manager, new URL(wsURL));
+		
+		String user     = "wstester1";
+		String password = "open1111";
+		AuthToken authToken = AuthService.login(user,password).getToken();
+		
+		UploadParams rawParameters = new UploadParams();
+		rawParameters.setType("FASTA");
+		rawParameters.setUploader("SimpleFastaFileUploader");
+
+		rawParameters.setName("MySecondTextFile.fasta");
+		rawParameters.setContent(">stuff\naaaa\n>things\nbbbb");
+		rawParameters.setWsName("TestWS1");
+		
+		WsUploadResult uploadResult = dispatcher.upload(rawParameters, authToken);
+		
+		System.out.println("SAVED! -> "+uploadResult.getAbsWsObjReference());
+		
+		
+		
 		//ws.requestModuleOwnership("File");
 		/*SaveObjectsParams p = new SaveObjectsParams();
 		ObjectSaveData o = new ObjectSaveData();
@@ -143,9 +207,12 @@ public class TestFileManager {
 		p.setWorkspace("TestWS1");
 		ws.saveObjects(p);
 		*/
+		
+		
+		/*
 		List <ObjectIdentity> oil = new ArrayList<ObjectIdentity>();
 		ObjectIdentity oi = new ObjectIdentity();
-		oi.setName("myFile.txt");
+		oi.setName("My.txt");
 		oi.setWorkspace("TestWS1");
 		oil.add(oi);
 		List <ObjectData> objs = ws.getObjects(oil);
@@ -156,6 +223,7 @@ public class TestFileManager {
 			System.out.println("filename : "+t.getFilename());
 			System.out.println("content : "+t.getContent());
 		}
+		*/
 		
 		/*CreateWorkspaceParams params = new CreateWorkspaceParams();
 		params.setWorkspace(wsi.getWorkspace());
