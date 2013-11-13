@@ -8,6 +8,8 @@ import us.kbase.common.service.JsonServerServlet;
 
 //BEGIN_HEADER
 import java.net.URL;
+
+import us.kbase.workspacefilehandler.core.FileData;
 import us.kbase.workspacefilehandler.core.WsFileManager;
 import us.kbase.workspacefilehandler.core.WsLoaderDispatcher;
 import us.kbase.workspacefilehandler.core.WsUploadResult;
@@ -100,7 +102,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   parameters   Original type "UploadParams" (see {@link us.kbase.workspacefilehandler.UploadParams UploadParams} for details)
-     * @return   Original type "ws_id" (A Ws ID (TODO: import this typedef from module Workspace) @id ws)
+     * @return   Original type "ws_obj_reference" (A Ws ID (TODO: import this typedef from module Workspace) @id ws)
      */
     @JsonServerMethod(rpc = "WorkspaceFileHandler.upload")
     public String upload(UploadParams parameters, AuthToken authPart) throws Exception {
@@ -131,12 +133,17 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   parameters   Original type "DownloadParams" (see {@link us.kbase.workspacefilehandler.DownloadParams DownloadParams} for details)
-     * @return   Original type "filecontent" (The content of a file, serialized as a string. (TODO: define encoding or encoding options))
+     * @return   Original type "DownloadedFile" (see {@link us.kbase.workspacefilehandler.DownloadedFile DownloadedFile} for details)
      */
     @JsonServerMethod(rpc = "WorkspaceFileHandler.download")
-    public String download(DownloadParams parameters, AuthToken authPart) throws Exception {
-        String returnVal = null;
+    public DownloadedFile download(DownloadParams parameters, AuthToken authPart) throws Exception {
+        DownloadedFile returnVal = null;
         //BEGIN download
+        FileData fd = dispatcher.download(parameters, authPart);
+        returnVal = new DownloadedFile();
+        returnVal.setFilename(fd.getFilename());
+        returnVal.setContent(fd.getContent());
+        returnVal.setSrcObj(fd.getSrcReference());
         //END download
         return returnVal;
     }
@@ -147,8 +154,8 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
      * </pre>
      */
     @JsonServerMethod(rpc = "WorkspaceFileHandler.download_batch")
-    public Map<String,String> downloadBatch(List<DownloadParams> parameters, AuthToken authPart) throws Exception {
-        Map<String,String> returnVal = null;
+    public Map<String,DownloadedFile> downloadBatch(List<DownloadParams> parameters, AuthToken authPart) throws Exception {
+        Map<String,DownloadedFile> returnVal = null;
         //BEGIN download_batch
         //END download_batch
         return returnVal;

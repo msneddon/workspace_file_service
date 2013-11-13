@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "valid_extensions",
     "default_uploader",
     "uploaders",
-    "loader_id",
+    "default_downloader",
     "downloaders"
 })
 public class FileType {
@@ -58,8 +58,8 @@ public class FileType {
     private String defaultUploader;
     @JsonProperty("uploaders")
     private List<String> uploaders = new ArrayList<String>();
-    @JsonProperty("loader_id")
-    private String loaderId;
+    @JsonProperty("default_downloader")
+    private String defaultDownloader;
     @JsonProperty("downloaders")
     private List<String> downloaders = new ArrayList<String>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -169,18 +169,18 @@ public class FileType {
         return this;
     }
 
-    @JsonProperty("loader_id")
-    public String getLoaderId() {
-        return loaderId;
+    @JsonProperty("default_downloader")
+    public String getDefaultDownloader() {
+        return defaultDownloader;
     }
 
-    @JsonProperty("loader_id")
-    public void setLoaderId(String loaderId) {
-        this.loaderId = loaderId;
+    @JsonProperty("default_downloader")
+    public void setDefaultDownloader(String defaultDownloader) {
+        this.defaultDownloader = defaultDownloader;
     }
 
-    public FileType withLoaderId(String loaderId) {
-        this.loaderId = loaderId;
+    public FileType withDefaultDownloader(String defaultDownloader) {
+        this.defaultDownloader = defaultDownloader;
         return this;
     }
 

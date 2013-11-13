@@ -7,7 +7,10 @@ import us.kbase.auth.AuthToken;
 import us.kbase.common.service.UnauthorizedException;
 import us.kbase.workspace.ObjectIdentity;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspacefilehandler.DownloadParams;
+import us.kbase.workspacefilehandler.FileType;
 import us.kbase.workspacefilehandler.UploadParams;
+import us.kbase.workspacefilehandler.exceptions.FileDownloadException;
 import us.kbase.workspacefilehandler.exceptions.FileUploadException;
 
 public class WsLoaderDispatcher {
@@ -74,7 +77,8 @@ public class WsLoaderDispatcher {
 	
 	protected void validateRawUploadParameters(UploadParams rawParameters) throws FileUploadException {
 
-		System.err.println(FileHandlerUtil.toString(rawParameters));
+		//System.err.println(FileHandlerUtil.toString(rawParameters));
+		
 		// validate filename exists and is not empty
 		if(rawParameters.getName()==null) { throw new FileUploadException("cannot upload file, filename was not set."); }
 		if(rawParameters.getName().equals("")) { throw new FileUploadException("cannot upload file, filename was empty string."); }
@@ -99,10 +103,64 @@ public class WsLoaderDispatcher {
 		// validate that the workspace name is set
 		if(rawParameters.getWsName()==null) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', target workspace name was not set."); }
 		if(rawParameters.getWsName().equals("")) { throw new FileUploadException("cannot upload file '"+rawParameters.getName()+"', target workspace name was empty string."); }
-		
-
 	}
 	
 	
+	
+	
+	public FileData download(DownloadParams rawParameters, AuthToken authToken) throws FileDownloadException {
+		
+		//validate the input
+		validateRawDownloadParameters(rawParameters);
+		
+		// fetch the proper downloader, should be valid once we get here
+		WsFileDownloader downloader = wfm.getDownloader(rawParameters.getDownloader());
+		
+		// fetch the file type, should be valid once we get here
+		FileType f = wfm.getFileType(rawParameters.getType());
+		
+		//create the download parameters object
+		InternalDownloadParameters parameters = new InternalDownloadParameters(authToken,f);
+		
+		// do the download and return the file
+		FileData downloadedFile = null;
+		try {
+			WorkspaceClient ws = new WorkspaceClient(workspaceUrl,authToken);
+			ws.setAuthAllowedForHttp(true);
+			downloadedFile = downloader.download(rawParameters.getRef(), parameters, ws);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			throw new FileDownloadException("Unexpected internal error encountered during download of '"+rawParameters.getRef()+"': "+e.getMessage(),e);
+		} catch (UnauthorizedException e) {
+			e.printStackTrace();
+			throw new FileDownloadException("User is not authorized to access the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new FileDownloadException("Unable to connect to the workspace, at '"+workspaceUrl.toExternalForm()+"'",e);
+		} catch(FileDownloadException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return downloadedFile;
+	}
+	
+	protected void validateRawDownloadParameters(DownloadParams rawParameters) throws FileDownloadException {
+		// validate that the filetype is set and is valid
+		if(rawParameters.getType()==null) { throw new FileDownloadException("cannot download, file type was not set."); }
+		if(rawParameters.getType().equals("")) { throw new FileDownloadException("cannot download, file type was empty string."); }
+		if(!wfm.isValidFiletype(rawParameters.getType())) { throw new FileDownloadException("cannot download, file type '"+rawParameters.getType()+"' is not a supported file type."); }
+	
+		// validate that we have an uploader for this filetype
+		if(rawParameters.getDownloader()==null) {
+			// if uploader is null, we set the default uploader for this filetype
+			rawParameters.setDownloader(wfm.getDefaultDownloader(rawParameters.getType()));
+		} else if(rawParameters.getDownloader().equals("")) {
+			throw new FileDownloadException("cannot download, downloader name was empty string.");
+		}
+		if(!wfm.isValidDownloader(rawParameters.getDownloader())) { throw new FileDownloadException("cannot download, '"+rawParameters.getDownloader()+"' is not a supported downloader."); }
+	
+		//TODO make sure the downloader and filetype are compatible
+		// ...
+	}
 	
 }

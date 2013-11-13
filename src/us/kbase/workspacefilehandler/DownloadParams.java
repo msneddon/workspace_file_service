@@ -22,15 +22,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "type",
-    "ws_id",
+    "ref",
     "downloader"
 })
 public class DownloadParams {
 
     @JsonProperty("type")
     private String type;
-    @JsonProperty("ws_id")
-    private String wsId;
+    @JsonProperty("ref")
+    private String ref;
     @JsonProperty("downloader")
     private String downloader;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -50,18 +50,18 @@ public class DownloadParams {
         return this;
     }
 
-    @JsonProperty("ws_id")
-    public String getWsId() {
-        return wsId;
+    @JsonProperty("ref")
+    public String getRef() {
+        return ref;
     }
 
-    @JsonProperty("ws_id")
-    public void setWsId(String wsId) {
-        this.wsId = wsId;
+    @JsonProperty("ref")
+    public void setRef(String ref) {
+        this.ref = ref;
     }
 
-    public DownloadParams withWsId(String wsId) {
-        this.wsId = wsId;
+    public DownloadParams withRef(String ref) {
+        this.ref = ref;
         return this;
     }
 

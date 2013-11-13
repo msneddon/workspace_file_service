@@ -207,20 +207,33 @@ public class WsFileManager {
 	}
 
 
+	
 	public boolean isValidFiletype(String fileTypeId) {
 		return fileTypeIndex.containsKey(fileTypeId);
 	}
 
 
+	
 	public String getDefaultUploader(String fileTypeId) {
 		FileType f = fileTypeIndex.get(fileTypeId);
 		if(f!=null) { return f.getDefaultUploader(); }
 		return "";
 	}
 
-
 	public boolean isValidUploader(String uploader) {
 		return uploaders.containsKey(uploader);
+	}
+
+
+	
+	public String getDefaultDownloader(String fileTypeId) {
+		FileType f = fileTypeIndex.get(fileTypeId);
+		if(f!=null) { return f.getDefaultDownloader(); }
+		return "";
+	}
+	
+	public boolean isValidDownloader(String downloader) {
+		return downloaders.containsKey(downloader);
 	}
 	
 }

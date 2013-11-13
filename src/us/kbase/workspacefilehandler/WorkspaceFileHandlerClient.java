@@ -128,7 +128,7 @@ public class WorkspaceFileHandlerClient {
      * <pre>
      * </pre>
      * @param   parameters   Original type "UploadParams" (see {@link us.kbase.workspacefilehandler.UploadParams UploadParams} for details)
-     * @return   Original type "ws_id" (A Ws ID (TODO: import this typedef from module Workspace) @id ws)
+     * @return   Original type "ws_obj_reference" (A Ws ID (TODO: import this typedef from module Workspace) @id ws)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
@@ -160,15 +160,15 @@ public class WorkspaceFileHandlerClient {
      * <pre>
      * </pre>
      * @param   parameters   Original type "DownloadParams" (see {@link us.kbase.workspacefilehandler.DownloadParams DownloadParams} for details)
-     * @return   Original type "filecontent" (The content of a file, serialized as a string. (TODO: define encoding or encoding options))
+     * @return   Original type "DownloadedFile" (see {@link us.kbase.workspacefilehandler.DownloadedFile DownloadedFile} for details)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public String download(DownloadParams parameters) throws IOException, JsonClientException {
+    public DownloadedFile download(DownloadParams parameters) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(parameters);
-        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("WorkspaceFileHandler.download", args, retType, true, true);
+        TypeReference<List<DownloadedFile>> retType = new TypeReference<List<DownloadedFile>>() {};
+        List<DownloadedFile> res = caller.jsonrpcCall("WorkspaceFileHandler.download", args, retType, true, true);
         return res.get(0);
     }
 
@@ -179,11 +179,11 @@ public class WorkspaceFileHandlerClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public Map<String,String> downloadBatch(List<DownloadParams> parameters) throws IOException, JsonClientException {
+    public Map<String,DownloadedFile> downloadBatch(List<DownloadParams> parameters) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(parameters);
-        TypeReference<List<Map<String,String>>> retType = new TypeReference<List<Map<String,String>>>() {};
-        List<Map<String,String>> res = caller.jsonrpcCall("WorkspaceFileHandler.download_batch", args, retType, true, true);
+        TypeReference<List<Map<String,DownloadedFile>>> retType = new TypeReference<List<Map<String,DownloadedFile>>>() {};
+        List<Map<String,DownloadedFile>> res = caller.jsonrpcCall("WorkspaceFileHandler.download_batch", args, retType, true, true);
         return res.get(0);
     }
 

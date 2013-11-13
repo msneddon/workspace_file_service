@@ -8,7 +8,7 @@ module WorkspaceFileHandler {
 		A Ws ID (TODO: import this typedef from module Workspace)
 		@id ws
 	*/
-	typedef string ws_id;
+	typedef string ws_obj_reference;
 	
 	/* the name of a WS (TODO: import this typedef from module Workspace) */
 	typedef string ws_name;
@@ -48,9 +48,11 @@ module WorkspaceFileHandler {
 		string description;
 		string url;
 		list <string> valid_extensions;
+		
 		loader_id default_uploader;
 		list <loader_id> uploaders;
-		string loader_id;
+		
+		loader_id default_downloader;
 		list <loader_id> downloaders;
 	} FileType;
 	
@@ -115,9 +117,9 @@ module WorkspaceFileHandler {
 		mapping <string,string> metadata;
 	} UploadParams;
 	
-	funcdef upload(UploadParams parameters) returns(ws_id) authentication required;
+	funcdef upload(UploadParams parameters) returns(ws_obj_reference) authentication required;
 	
-	funcdef upload_batch(list<UploadParams> paramameters_list) returns(list<ws_id>) authentication required;
+	funcdef upload_batch(list<UploadParams> paramameters_list) returns(list<ws_obj_reference>) authentication required;
 	
 	
 	/*
@@ -125,13 +127,20 @@ module WorkspaceFileHandler {
 	*/
 	typedef structure {
 		filetype_id type;
-		ws_id ws_id;
+		ws_obj_reference ref;
 		loader_id downloader;
 	} DownloadParams;
 	
-	funcdef download(DownloadParams parameters) returns(filecontent) authentication required;
 	
-	funcdef download_batch(list<DownloadParams> parameters) returns (mapping<ws_id,filecontent>) authentication required;
+	typedef structure {
+		ws_obj_reference src_obj;
+		string filename;
+		string content;
+	} DownloadedFile;
+	
+	funcdef download(DownloadParams parameters) returns(DownloadedFile) authentication required;
+	
+	funcdef download_batch(list<DownloadParams> parameters) returns (mapping<ws_obj_reference,DownloadedFile>) authentication required;
 	
 	
 	
