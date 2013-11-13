@@ -90,9 +90,9 @@ if($n_args==0) {
 }     
 elsif($n_args>=1) {
      # make sure all the other necessary arguments are defined
-     if (!defined($user)) { print "Missing required parameter --user.  Run with --help for usage.\n"; exit 1; }
-     if (!defined($filetype)) { print "Missing required parameter --type.  Run with --help for usage.\n"; exit 1; }
-     if (!defined($workspace)) { print "Missing required parameter --workspace.  Run with --help for usage.\n"; exit 1; }
+     if (!defined($user)) { print  STDERR "Missing required parameter --user.  Run with --help for usage.\n"; exit 1; }
+     if (!defined($filetype)) { print  STDERR "Missing required parameter --type.  Run with --help for usage.\n"; exit 1; }
+     if (!defined($workspace)) { print  STDERR "Missing required parameter --workspace.  Run with --help for usage.\n"; exit 1; }
      
      # make sure we have a password
      if (!defined($password)) { $password = get_pass(); }
@@ -119,18 +119,18 @@ elsif($n_args>=1) {
                     my $wsid = $wfh->upload($upload_params);
                     print $filename."\t".$wsid."\n";
                } else {
-                    print "batch upload not yet supported.\n";
+                    print  STDERR "batch upload not yet supported.\n";
                     exit 1;
                }
           }
           else {
-               print "File '$filename' does not exist.\n";
+               print  STDERR "File '$filename' does not exist.\n";
                exit 1;
           }
      }
      exit 0;
 }
-print "unknown error.  Run with --help for usage.\n";
+print  STDERR "unknown error.  Run with --help for usage.\n";
 exit 1;
 
 

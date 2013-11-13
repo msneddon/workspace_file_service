@@ -139,7 +139,7 @@ elsif($n_args>=1) {
      }
      exit 0;
 }
-print "unknown error.  Run with --help for usage.\n";
+print STDERR "unknown error.  Run with --help for usage.\n";
 exit 1;
 
 
