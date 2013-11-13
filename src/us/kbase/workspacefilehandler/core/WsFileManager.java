@@ -37,6 +37,10 @@ public class WsFileManager {
 	
 	
 	private Map<String,FileType> fileTypeIndex;
+	private List<FileType> uploadableFileTypes;
+	private List<FileType> downloadableFileTypes;
+	
+	
 	private Map<String,WsFileUploader> uploaders;
 	private Map<String,WsFileDownloader> downloaders;
 	
@@ -55,6 +59,8 @@ public class WsFileManager {
 		
 		// build our index of FileTypes
 		fileTypeIndex = new HashMap<String,FileType>(fileTypeList.size());
+		uploadableFileTypes = new ArrayList<FileType>(fileTypeList.size());
+		downloadableFileTypes = new ArrayList<FileType>(fileTypeList.size());
 		for(int k=0; k<fileTypeList.size(); k++) {
 			final JsonNode fileTypeJson = fileTypeList.get(k);
 			FileType f = new FileType();
@@ -65,6 +71,7 @@ public class WsFileManager {
 			f.setDescription(fileTypeJson.get("description").asText());
 			f.setUrl(fileTypeJson.get("url").asText());
 			//set downloaders info
+			f.setDefaultDownloader(fileTypeJson.get("default_downloader").asText());
 			JsonNode downloaders = fileTypeJson.get("downloaders");
 			List <String> downloadersList = new ArrayList<String>(downloaders.size());
 			for(int d=0; d<downloaders.size(); d++) {
@@ -72,6 +79,7 @@ public class WsFileManager {
 			}
 			f.setDownloaders(downloadersList);
 			//set uploaders info
+			f.setDefaultUploader(fileTypeJson.get("default_uploader").asText());
 			JsonNode uploaders = fileTypeJson.get("uploaders");
 			List <String> uploadersList = new ArrayList<String>(uploaders.size());
 			for(int u=0; u<uploaders.size(); u++) {
@@ -84,6 +92,13 @@ public class WsFileManager {
 				throw new FileHandlerInitializationException("two FileTypes have the same ID: "+f.getId()+", service not running.");
 			}
 			fileTypeIndex.put(f.getId(), f);
+			
+			if(!f.getUploaders().isEmpty()) {
+				uploadableFileTypes.add(f);
+			}
+			if(!f.getDownloaders().isEmpty()) {
+				downloadableFileTypes.add(f);
+			}
 			
 			if(VERBOSE) {
 				System.out.println(FileHandlerUtil.toString(f));
@@ -161,10 +176,20 @@ public class WsFileManager {
 		return typeList;
 	}
 	
-	
 	public List<FileType> getAllFileTypes() {
 		return Collections.unmodifiableList(new ArrayList<FileType>(fileTypeIndex.values()));
 	}
+	
+	
+	public List<FileType> getAllUploadableFileTypes() {
+		return Collections.unmodifiableList(uploadableFileTypes);
+	}
+	
+	public List<FileType> getAllDownloadableFileTypes() {
+		return Collections.unmodifiableList(downloadableFileTypes);
+	}
+	
+	
 	
 	public WsFileUploader getUploader (String loaderId) throws FileUploadException {
 		WsFileUploader uploader = uploaders.get(loaderId);

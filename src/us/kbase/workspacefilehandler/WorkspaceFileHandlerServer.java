@@ -1,15 +1,16 @@
 package us.kbase.workspacefilehandler;
 
 import java.util.List;
-import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 
 //BEGIN_HEADER
+import java.util.ArrayList;
 import java.net.URL;
 
 import us.kbase.workspacefilehandler.core.FileData;
+import us.kbase.workspacefilehandler.core.WsFileDownloader;
 import us.kbase.workspacefilehandler.core.WsFileManager;
 import us.kbase.workspacefilehandler.core.WsLoaderDispatcher;
 import us.kbase.workspacefilehandler.core.WsUploadResult;
@@ -50,6 +51,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public List<FileType> getAllFileTypes() throws Exception {
         List<FileType> returnVal = null;
         //BEGIN getAllFileTypes
+        returnVal = manager.getAllFileTypes();
         //END getAllFileTypes
         return returnVal;
     }
@@ -64,6 +66,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public List<FileType> getUploadableFileTypes() throws Exception {
         List<FileType> returnVal = null;
         //BEGIN getUploadableFileTypes
+        returnVal = manager.getAllUploadableFileTypes();
         //END getUploadableFileTypes
         return returnVal;
     }
@@ -78,6 +81,7 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     public List<FileType> getDownloadableFileTypes() throws Exception {
         List<FileType> returnVal = null;
         //BEGIN getDownloadableFileTypes
+        returnVal = manager.getAllUploadableFileTypes();
         //END getDownloadableFileTypes
         return returnVal;
     }
@@ -115,20 +119,6 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
     }
 
     /**
-     * <p>Original spec-file function name: upload_batch</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "WorkspaceFileHandler.upload_batch")
-    public List<String> uploadBatch(List<UploadParams> paramametersList, AuthToken authPart) throws Exception {
-        List<String> returnVal = null;
-        //BEGIN upload_batch
-        
-        //END upload_batch
-        return returnVal;
-    }
-
-    /**
      * <p>Original spec-file function name: download</p>
      * <pre>
      * </pre>
@@ -145,45 +135,6 @@ public class WorkspaceFileHandlerServer extends JsonServerServlet {
         returnVal.setContent(fd.getContent());
         returnVal.setSrcObj(fd.getSrcReference());
         //END download
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: download_batch</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "WorkspaceFileHandler.download_batch")
-    public Map<String,DownloadedFile> downloadBatch(List<DownloadParams> parameters, AuthToken authPart) throws Exception {
-        Map<String,DownloadedFile> returnVal = null;
-        //BEGIN download_batch
-        //END download_batch
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: getDownloader</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "WorkspaceFileHandler.getDownloader")
-    public List<Downloader> getDownloader(List<String> ids) throws Exception {
-        List<Downloader> returnVal = null;
-        //BEGIN getDownloader
-        //END getDownloader
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: getUploader</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "WorkspaceFileHandler.getUploader")
-    public List<Uploader> getUploader(List<String> ids) throws Exception {
-        List<Uploader> returnVal = null;
-        //BEGIN getUploader
-        //END getUploader
         return returnVal;
     }
 

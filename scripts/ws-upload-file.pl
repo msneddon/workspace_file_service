@@ -58,7 +58,7 @@ my $batch;
 my $help;
 
 my $opt = GetOptions (
-        "list-types|l=s" => \$listtypes,
+        "list-types|l" => \$listtypes,
         "type|t=s" => \$filetype,
         "uploader|r=s" => \$uploader,
         "workspace|w=s" => \$workspace,
@@ -77,7 +77,23 @@ if(defined($help)) {
 
 # list available types if requested
 if (defined($listtypes)) {
-     print "listing types not implemented.\n";
+     my $wfh = Bio::KBase::WorkspaceFileHandler::Client->new($url);
+     my $filetypes = $wfh->getUploadableFileTypes();
+     foreach my $ft (@$filetypes) {
+          print $ft->{id} ."\t".$ft->{name}."\tuploaders:[";
+          my $isFirst = 1;
+          foreach my $d (@{$ft->{uploaders}}) {
+               if ($isFirst) { $isFirst=0; }
+               else { print ", "; }
+               print $d;
+               if (defined($ft->{default_uploader})) {
+                    if ($d eq $ft->{default_uploader}) {
+                         print "(default)";
+                    }
+               }
+          }
+          print "]\n";
+     }
      exit 0;
 }
 

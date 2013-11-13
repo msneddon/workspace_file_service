@@ -57,7 +57,7 @@ my $listtypes;
 my $help;
 
 my $opt = GetOptions (
-        "list-types|l=s" => \$listtypes,
+        "list-types|l" => \$listtypes,
         "type|t=s" => \$filetype,
         "downloader|r=s" => \$downloader,
         "outdir|o=s" => \$outdir,
@@ -77,7 +77,23 @@ if(defined($help)) {
 
 # list available types if requested
 if (defined($listtypes)) {
-     print "listing types not implemented.\n";
+     my $wfh = Bio::KBase::WorkspaceFileHandler::Client->new($url);
+     my $filetypes = $wfh->getDownloadableFileTypes();
+     foreach my $ft (@$filetypes) {
+          print $ft->{id} ."\t".$ft->{name}."\tdownloaders:[";
+          my $isFirst = 1;
+          foreach my $d (@{$ft->{downloaders}}) {
+               if ($isFirst) { $isFirst=0; }
+               else { print ", "; }
+               print $d;
+               if (defined($ft->{default_downloader})) {
+                    if ($d eq $ft->{default_downloader}) {
+                         print "(default)";
+                    }
+               }
+          }
+          print "]\n";
+     }
      exit 0;
 }
 
@@ -93,13 +109,11 @@ elsif($n_args>=1) {
      if (!defined($user)) { print STDERR "Missing required parameter --user.  Run with --help for usage.\n"; exit 1; }
      if (!defined($filetype)) { print STDERR "Missing required parameter --type.  Run with --help for usage.\n"; exit 1; }
      if (defined($outdir)) {
-          if(!-f $outdir) {
+          if(!-d $outdir) {
                print STDERR "Output dir specified is not a directory.  Run with --help for usage.\n"; exit 1;
           }
      }
 
-     
-     
      # make sure we have a password
      if (!defined($password)) { $password = get_pass(); }
      

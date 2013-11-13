@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientCaller;
 import us.kbase.common.service.JsonClientException;
@@ -141,21 +140,6 @@ public class WorkspaceFileHandlerClient {
     }
 
     /**
-     * <p>Original spec-file function name: upload_batch</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public List<String> uploadBatch(List<UploadParams> paramametersList) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(paramametersList);
-        TypeReference<List<List<String>>> retType = new TypeReference<List<List<String>>>() {};
-        List<List<String>> res = caller.jsonrpcCall("WorkspaceFileHandler.upload_batch", args, retType, true, true);
-        return res.get(0);
-    }
-
-    /**
      * <p>Original spec-file function name: download</p>
      * <pre>
      * </pre>
@@ -169,51 +153,6 @@ public class WorkspaceFileHandlerClient {
         args.add(parameters);
         TypeReference<List<DownloadedFile>> retType = new TypeReference<List<DownloadedFile>>() {};
         List<DownloadedFile> res = caller.jsonrpcCall("WorkspaceFileHandler.download", args, retType, true, true);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: download_batch</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public Map<String,DownloadedFile> downloadBatch(List<DownloadParams> parameters) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(parameters);
-        TypeReference<List<Map<String,DownloadedFile>>> retType = new TypeReference<List<Map<String,DownloadedFile>>>() {};
-        List<Map<String,DownloadedFile>> res = caller.jsonrpcCall("WorkspaceFileHandler.download_batch", args, retType, true, true);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: getDownloader</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public List<Downloader> getDownloader(List<String> ids) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(ids);
-        TypeReference<List<List<Downloader>>> retType = new TypeReference<List<List<Downloader>>>() {};
-        List<List<Downloader>> res = caller.jsonrpcCall("WorkspaceFileHandler.getDownloader", args, retType, true, false);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: getUploader</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public List<Uploader> getUploader(List<String> ids) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(ids);
-        TypeReference<List<List<Uploader>>> retType = new TypeReference<List<List<Uploader>>>() {};
-        List<List<Uploader>> res = caller.jsonrpcCall("WorkspaceFileHandler.getUploader", args, retType, true, false);
         return res.get(0);
     }
 }

@@ -119,7 +119,7 @@ module WorkspaceFileHandler {
 	
 	funcdef upload(UploadParams parameters) returns(ws_obj_reference) authentication required;
 	
-	funcdef upload_batch(list<UploadParams> paramameters_list) returns(list<ws_obj_reference>) authentication required;
+	/* funcdef upload_batch(list<UploadParams> paramameters_list) returns(list<ws_obj_reference>) authentication required; */
 	
 	
 	/*
@@ -140,14 +140,13 @@ module WorkspaceFileHandler {
 	
 	funcdef download(DownloadParams parameters) returns(DownloadedFile) authentication required;
 	
-	funcdef download_batch(list<DownloadParams> parameters) returns (mapping<ws_obj_reference,DownloadedFile>) authentication required;
+	/* funcdef download_batch(list<DownloadParams> parameters) returns (mapping<ws_obj_reference,DownloadedFile>) authentication required; */
 	
 	
 	
 	
 	
 	
-	funcdef getDownloader(list<loader_id> ids) returns (list<Downloader>);
-	
-	funcdef getUploader(list<loader_id> ids) returns (list<Uploader>);
+	/* funcdef getDownloader(list<loader_id> ids) returns (list<Downloader>); */
+	/* funcdef getUploader(list<loader_id> ids) returns (list<Uploader>); */
 };
