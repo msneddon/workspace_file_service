@@ -3,6 +3,7 @@ package us.kbase.workspacefilehandler.core;
 import java.util.Map;
 
 import us.kbase.common.service.Tuple10;
+import us.kbase.common.service.Tuple11;
 
 public class WsObjectInfoFull {
 
@@ -14,22 +15,24 @@ public class WsObjectInfoFull {
 	private Long version;
 	private String created_by;
 	private Long wsid;
+	private String workspace_name;
 	private String chsum;
 	private Long size;
 	private Map<String, String> meta;
 	
 	
-	public WsObjectInfoFull(Tuple10<Long, String, String, String, Long, String, Long, String, Long, Map<String, String>> object_info) {
-		objid      = object_info.getE1();
-		name       = object_info.getE2();
-		type       = object_info.getE3();
-		save_date  = object_info.getE4();
-		version    = object_info.getE5();
-		created_by = object_info.getE6();
-		wsid       = object_info.getE7();
-		chsum      = object_info.getE8();
-		size       = object_info.getE9();
-		meta       = object_info.getE10();
+	public WsObjectInfoFull(Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> tuple11) {
+		objid      = tuple11.getE1();
+		name       = tuple11.getE2();
+		type       = tuple11.getE3();
+		save_date  = tuple11.getE4();
+		version    = tuple11.getE5();
+		created_by = tuple11.getE6();
+		wsid       = tuple11.getE7();
+		workspace_name = tuple11.getE8();
+		chsum      = tuple11.getE9();
+		size       = tuple11.getE10();
+		meta       = tuple11.getE11();
 	}
 	
 	public String getTypeName() {

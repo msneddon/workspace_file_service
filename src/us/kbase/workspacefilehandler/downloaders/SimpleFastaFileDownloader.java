@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import us.kbase.common.service.Tuple10;
+import us.kbase.common.service.Tuple11;
 import us.kbase.file.FastaFile;
 import us.kbase.file.FastaRow;
 import us.kbase.file.TextFile;
@@ -32,7 +33,7 @@ public class SimpleFastaFileDownloader implements WsFileDownloader{
 		// STEP 2: get info about the objects and make sure they are the expected type.  We also need to remember the absolute object reference
 		String absObjReference = "";
 		try {
-			List<Tuple10<Long, String, String, String, Long, String, Long, String, Long, Map<String, String>>> objectInfoList = ws.getObjectInfo(objectIds);
+			List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> objectInfoList = ws.getObjectInfo(objectIds);
 			// should only ever be one result if the object exists because this is not a batch download
 			WsObjectInfoFull wsoif = new WsObjectInfoFull(objectInfoList.get(0));
 			// make sure the type is valid
