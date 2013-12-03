@@ -1,6 +1,9 @@
 package us.kbase.workspacefilehandler.core;
 
+import java.util.Map;
+
 import us.kbase.common.service.Tuple10;
+import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.Tuple9;
 
 public class WsUploadResult {
@@ -48,6 +51,11 @@ public class WsUploadResult {
 		absWsObjReference = "kb|ws."+tuple10.getE7()+".obj."+tuple10.getE1()+".ver."+tuple10.getE5();
 	}
 	
+	public WsUploadResult(
+			Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> tuple11) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getAbsWsObjReference() {
 		return absWsObjReference;
 	}

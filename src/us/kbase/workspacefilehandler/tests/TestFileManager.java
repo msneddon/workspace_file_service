@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import us.kbase.auth.*;
 import us.kbase.common.service.Tuple6;
+import us.kbase.common.service.Tuple7;
 import us.kbase.workspace.*;
 import us.kbase.workspacefilehandler.DownloadParams;
 import us.kbase.workspacefilehandler.DownloadedFile;
@@ -50,7 +51,7 @@ public class TestFileManager {
 		wsi.setWorkspace(wsname);
 		
 		try {
-			Tuple6<Long,String,String,String,String,String> info = ws.getWorkspaceInfo(wsi);
+			Tuple7<Long, String, String, String, Long, String, String> info = ws.getWorkspaceInfo(wsi);
 			System.out.println("WS is ready, details:");
 			printWsInfo(info);
 		} catch (Exception e) {
@@ -60,14 +61,14 @@ public class TestFileManager {
 				params.setWorkspace(wsi.getWorkspace());
 				params.setDescription("test ws for wstester1");
 				params.setGlobalread("n");
-				Tuple6<Long,String,String,String,String,String> info = ws.createWorkspace(params);
+				Tuple7<Long, String, String, String, Long, String, String> info = ws.createWorkspace(params);
 				System.out.println("Created WS: "+params.getWorkspace());
 				printWsInfo(info);
 			} catch (Exception e1) {
 				System.out.println("WS could not be created, attempting to undelete.");
 				ws.undeleteWorkspace(wsi);
 				System.out.println("Undeleted WS: "+wsi.getWorkspace());
-				Tuple6<Long,String,String,String,String,String> info = ws.getWorkspaceInfo(wsi);
+				Tuple7<Long, String, String, String, Long, String, String> info = ws.getWorkspaceInfo(wsi);
 				printWsInfo(info);
 			}
 		}
@@ -249,12 +250,13 @@ public class TestFileManager {
 	}
 
 	
-	private static void printWsInfo(Tuple6<Long,String,String,String,String,String> info) {
+	private static void printWsInfo(Tuple7<Long, String, String, String, Long, String, String> info) {
 		System.out.println("  [1]:"+info.getE1());
 		System.out.println("  [2]:"+info.getE2());
 		System.out.println("  [3]:"+info.getE3());
 		System.out.println("  [4]:"+info.getE4());
 		System.out.println("  [5]:"+info.getE5());
 		System.out.println("  [6]:"+info.getE6());
+		System.out.println("  [7]:"+info.getE7());
 	}
 }

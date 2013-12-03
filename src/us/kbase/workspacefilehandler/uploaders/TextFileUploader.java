@@ -2,8 +2,10 @@ package us.kbase.workspacefilehandler.uploaders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import us.kbase.common.service.Tuple10;
+import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.Tuple9;
 import us.kbase.common.service.UObject;
 import us.kbase.file.TextFile;
@@ -62,7 +64,7 @@ public class TextFileUploader  implements WsFileUploader{
 		//Step 6: actually save the object
 		WsUploadResult uploadResult = null;
 		try {
-			List<Tuple10<Long, String, String, String, Long, String, Long, String, String, Long>> result_list = ws.saveObjects(p);
+			List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> result_list = ws.saveObjects(p);
 			uploadResult = new WsUploadResult(result_list.get(0));
 		} catch (Exception e) {
 			// If we encountered an error during saving, we should catch it and throw it back up as a FileUploadException
