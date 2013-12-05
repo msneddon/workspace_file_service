@@ -16,6 +16,7 @@ import org.junit.Test;
 import us.kbase.auth.*;
 import us.kbase.common.service.Tuple6;
 import us.kbase.common.service.Tuple7;
+import us.kbase.common.service.Tuple8;
 import us.kbase.workspace.*;
 import us.kbase.workspacefilehandler.DownloadParams;
 import us.kbase.workspacefilehandler.DownloadedFile;
@@ -51,7 +52,7 @@ public class TestFileManager {
 		wsi.setWorkspace(wsname);
 		
 		try {
-			Tuple7<Long, String, String, String, Long, String, String> info = ws.getWorkspaceInfo(wsi);
+			Tuple8<Long, String, String, String, Long, String, String, String> info = ws.getWorkspaceInfo(wsi);
 			System.out.println("WS is ready, details:");
 			printWsInfo(info);
 		} catch (Exception e) {
@@ -61,14 +62,14 @@ public class TestFileManager {
 				params.setWorkspace(wsi.getWorkspace());
 				params.setDescription("test ws for wstester1");
 				params.setGlobalread("n");
-				Tuple7<Long, String, String, String, Long, String, String> info = ws.createWorkspace(params);
+				Tuple8<Long, String, String, String, Long, String, String, String> info = ws.createWorkspace(params);
 				System.out.println("Created WS: "+params.getWorkspace());
 				printWsInfo(info);
 			} catch (Exception e1) {
 				System.out.println("WS could not be created, attempting to undelete.");
 				ws.undeleteWorkspace(wsi);
 				System.out.println("Undeleted WS: "+wsi.getWorkspace());
-				Tuple7<Long, String, String, String, Long, String, String> info = ws.getWorkspaceInfo(wsi);
+				Tuple8<Long, String, String, String, Long, String, String, String> info = ws.getWorkspaceInfo(wsi);
 				printWsInfo(info);
 			}
 		}
@@ -104,16 +105,16 @@ public class TestFileManager {
 	    } finally {
 	        br.close();
 	    }
-	    CompileTypespecParams ctp = new CompileTypespecParams();
-	    ctp.setDryrun(new Long(0));
-	    ctp.setSpec(content);
-	    ctp.setDependencies(new HashMap<String,Long>());
+	    RegisterTypespecParams ctp = new RegisterTypespecParams()
+	    									.withDryrun(0L)
+	    									.withSpec(content)
+	    									.withDependencies(new HashMap<String,Long>());
 	    List<String> newTypes = new ArrayList<String>();
 	    newTypes.add("TextFile");
 	    newTypes.add("FastaFile");
 	    ctp.setNewTypes(newTypes);
 	    //System.out.println(ctp.getMod());
-	    Map<String,String> result = ws.compileTypespec(ctp);
+	    Map<String,String> result = ws.registerTypespec(ctp);
 	    System.out.println("compilation result:");
 	    for(Map.Entry<String, String> e : result.entrySet()) {
 	    	System.out.println(e.getKey()+" -> "+e.getValue());
@@ -250,7 +251,7 @@ public class TestFileManager {
 	}
 
 	
-	private static void printWsInfo(Tuple7<Long, String, String, String, Long, String, String> info) {
+	private static void printWsInfo(Tuple8<Long, String, String, String, Long, String, String, String> info) {
 		System.out.println("  [1]:"+info.getE1());
 		System.out.println("  [2]:"+info.getE2());
 		System.out.println("  [3]:"+info.getE3());
@@ -258,5 +259,6 @@ public class TestFileManager {
 		System.out.println("  [5]:"+info.getE5());
 		System.out.println("  [6]:"+info.getE6());
 		System.out.println("  [7]:"+info.getE7());
+		System.out.println("  [8]:"+info.getE8());
 	}
 }
